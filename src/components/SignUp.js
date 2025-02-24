@@ -1,27 +1,32 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "../App.css";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
-export default function SignUp() {
+export default function Signup() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
+  const location = useLocation();
+
+  // Extract the redirect path from URL query
+  const searchParams = new URLSearchParams(location.search);
+  const redirectPath = searchParams.get("redirect") || "/";
+
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSignUp = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
+    setError("");
 
     try {
       const response = await fetch(
@@ -29,80 +34,96 @@ export default function SignUp() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userData),
+          body: JSON.stringify(formData),
         }
       );
 
       const data = await response.json();
-
       if (response.ok) {
-        setLoading(false);
-        setSuccess(true);
-        setTimeout(() => navigate("/login"), 1500);
+        navigate(redirectPath); // Redirect back to previous page
       } else {
-        setError(data.message || "Something went wrong. Try again.");
-        setLoading(false);
+        setError(data.message || "Signup failed.");
       }
-    } catch (err) {
-      setError("Network error. Try again.");
-      setLoading(false);
+    } catch {
+      setError("Something went wrong. Try again later.");
     }
+    setLoading(false);
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-box">
-        <h2 className="text-center mb-4">Sign Up</h2>
-        {error && <p className="text-danger">{error}</p>}
-        <form onSubmit={handleSignUp}>
-          <div className="mb-3">
-            <label className="form-label">Full Name</label>
+    <motion.div 
+      className="flex justify-center items-center min-h-screen bg-gradient-to-bl from-teal-400 to-indigo-500"
+      initial={{ opacity: 0, y: 30 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      exit={{ opacity: 0, y: -30 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div 
+        className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full"
+        initial={{ scale: 0.9 }} 
+        animate={{ scale: 1 }} 
+        transition={{ duration: 0.4 }}
+      >
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Sign Up
+        </h2>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
+        <form onSubmit={handleSignup} className="space-y-4">
+          <div>
+            <label className="text-gray-700 font-medium">Full Name</label>
             <input
               type="text"
               name="name"
-              className="form-control"
+              className="w-full p-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
               placeholder="Enter your name"
-              value={userData.name}
               onChange={handleChange}
               required
             />
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Email Address</label>
+          <div>
+            <label className="text-gray-700 font-medium">Email Address</label>
             <input
               type="email"
               name="email"
-              className="form-control"
-              placeholder="Enter your email"
-              value={userData.email}
+              className="w-full p-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
+              placeholder="Enter email"
               onChange={handleChange}
               required
             />
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Password</label>
+          <div>
+            <label className="text-gray-700 font-medium">Password</label>
             <input
               type="password"
               name="password"
-              className="form-control"
-              placeholder="Enter your password"
-              value={userData.password}
+              className="w-full p-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
+              placeholder="Enter password"
               onChange={handleChange}
               required
             />
           </div>
 
-          <button type="submit" className="btn btn-success w-100" disabled={loading}>
-            {loading ? "Creating Account..." : success ? "✅ Success" : "Sign Up"}
-          </button>
+          <motion.button
+            type="submit"
+            className="w-full bg-indigo-500 text-white py-3 rounded-lg font-semibold transition duration-300 hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-300"
+            disabled={loading}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
+          </motion.button>
         </form>
 
-        <p className="text-center mt-3 auth-links">
-          Already have an account? <Link to="/login">Login here</Link>
+        <p className="text-center mt-4 text-gray-600">
+          Already have an account?{" "}
+          <Link to={`/login?redirect=${redirectPath}`} className="text-indigo-600 hover:underline transition">
+            Login here
+          </Link>
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
