@@ -125,7 +125,12 @@ const Navbar = () => {
                   id="user-menu-button"
                   onClick={toggleProfileDropdown}
                 >
-                  <img className="w-8 h-8 rounded-full" src="/path-to-user-image.jpg" alt="User" />
+                  {/* Default Profile Image */}
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src="https://www.gravatar.com/avatar/default?s=200&d=mp" // Default Gravatar image
+                    alt="User"
+                  />
                 </button>
 
                 {/* Profile Dropdown Menu */}
