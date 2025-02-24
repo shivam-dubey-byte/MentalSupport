@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import FloatingButtons from "./components/FloatingButtons"; // Import the FloatingButtons component
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ const App = () => {
   return (
     <Router>
       <AnimatedRoutes />
+      <FloatingButtons /> {/* Add the FloatingButtons component here */}
     </Router>
   );
 };
