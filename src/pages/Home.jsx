@@ -1,10 +1,19 @@
-import { useState } from 'react';
 import Navbar from '../components/Navbar';
-const Home = () => {
+import IntroSection from '../components/IntroSection';
+import TalkSection from '../components/TalkSection';
+import PlacesSection from '../components/PlacesSection';
+import ShoppingSection from '../components/ShoppingSection';
+import Footer from '../components/Footer';  // ✅ Import Footer
 
+const Home = () => {
   return (
-    <div >
-      <Navbar/>
+    <div>
+      <Navbar />
+      <IntroSection />
+      <TalkSection />
+      <PlacesSection />
+      <ShoppingSection />
+      <Footer />  {/* ✅ Add Footer */}
     </div>
   );
 };
