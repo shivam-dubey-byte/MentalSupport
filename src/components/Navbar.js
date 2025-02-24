@@ -6,6 +6,7 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false); // State for profile dropdown
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu dropdown
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeSection, setActiveSection] = useState("intro"); // State for active section
   const [userEmail, setUserEmail] = useState(""); // State to store user email
   const navigate = useNavigate();
 
@@ -24,6 +25,29 @@ const Navbar = () => {
         setUserEmail(decodedToken.email);
       }
     }
+
+    // Set up Intersection Observer to track active section
+    const sections = document.querySelectorAll("section");
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5, // Trigger when 50% of the section is visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id); // Update active section
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Cleanup observer
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, []);
 
   // Close dropdowns when clicking outside
@@ -157,8 +181,21 @@ const Navbar = () => {
               aria-expanded={isMobileMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
-              <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
+              {/* Hamburger Icon */}
+              <svg
+                className="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 17 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 1h15M1 7h15M1 13h15"
+                />
               </svg>
             </button>
           </div>
@@ -175,7 +212,11 @@ const Navbar = () => {
               <li>
                 <a
                   href="#intro"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  className={`block py-2 px-3 rounded-sm ${
+                    activeSection === "intro"
+                      ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700"
+                      : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)} // Close mobile menu on click
                 >
                   Intro
@@ -184,7 +225,11 @@ const Navbar = () => {
               <li>
                 <a
                   href="#talk"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  className={`block py-2 px-3 rounded-sm ${
+                    activeSection === "talk"
+                      ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700"
+                      : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)} // Close mobile menu on click
                 >
                   Talk
@@ -193,7 +238,11 @@ const Navbar = () => {
               <li>
                 <a
                   href="#places"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  className={`block py-2 px-3 rounded-sm ${
+                    activeSection === "places"
+                      ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700"
+                      : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)} // Close mobile menu on click
                 >
                   Places
@@ -202,7 +251,11 @@ const Navbar = () => {
               <li>
                 <a
                   href="#shopping"
-                  className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  className={`block py-2 px-3 rounded-sm ${
+                    activeSection === "shopping"
+                      ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700"
+                      : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white"
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)} // Close mobile menu on click
                 >
                   Shopping
