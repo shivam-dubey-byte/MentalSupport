@@ -138,8 +138,8 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-md dark:bg-gray-700 z-30">
                     <div className="px-4 py-3">
                       <span className="block text-sm text-gray-900 dark:text-white">User Name</span>
-                      <span className="block text-sm text-gray-500 dark:text-gray-400">
-                        {userEmail} {/* Display user email */}
+                      <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
+                        {userEmail} {/* Truncated email */}
                       </span>
                     </div>
                     <ul className="py-2">
