@@ -10,9 +10,10 @@ const Navbar = () => {
   const [userEmail, setUserEmail] = useState(""); // State to store user email
   const navigate = useNavigate();
 
-  // Refs for dropdowns
+  // Refs for dropdowns and mobile menu toggle button
   const profileDropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
+  const mobileMenuToggleRef = useRef(null); // Ref for mobile menu toggle button
 
   useEffect(() => {
     // Check if user is logged in
@@ -53,6 +54,14 @@ const Navbar = () => {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Ignore clicks on the mobile menu toggle button
+      if (
+        mobileMenuToggleRef.current &&
+        mobileMenuToggleRef.current.contains(event.target)
+      ) {
+        return; // Do nothing if the mobile menu toggle button is clicked
+      }
+
       // Close profile dropdown if clicked outside
       if (
         profileDropdownRef.current &&
@@ -184,6 +193,7 @@ const Navbar = () => {
               onClick={toggleMobileMenu}
               aria-controls="navbar-sticky"
               aria-expanded={isMobileMenuOpen}
+              ref={mobileMenuToggleRef} // Add ref to mobile menu toggle button
             >
               <span className="sr-only">Open main menu</span>
               {/* Hamburger Icon */}
