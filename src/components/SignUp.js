@@ -29,7 +29,8 @@ export default function Signup() {
     setError("");
 
     try {
-      const response = await fetch(
+      // Signup request
+      const signupResponse = await fetch(
         "https://mujtpcbackend.shivamrajdubey.tech/auth/signup",
         {
           method: "POST",
@@ -38,15 +39,46 @@ export default function Signup() {
         }
       );
 
-      const data = await response.json();
-      if (response.ok) {
-        navigate(redirectPath); // Redirect back to previous page
-      } else {
-        setError(data.message || "Signup failed.");
+      const signupData = await signupResponse.json();
+
+      if (!signupResponse.ok) {
+        setError(signupData.message || "Signup failed.");
+        setLoading(false);
+        return;
       }
-    } catch {
+
+      // Login request after successful signup
+      const loginResponse = await fetch(
+        "https://mujtpcbackend.shivamrajdubey.tech/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const loginData = await loginResponse.json();
+
+      if (loginResponse.ok && loginData.token) {
+        // Store user token in sessionStorage (consistent with Navbar)
+        sessionStorage.setItem("token", loginData.token);
+        sessionStorage.setItem("user", JSON.stringify(loginData));
+
+        // Notify other components about login state change
+        window.dispatchEvent(new Event("storage"));
+
+        navigate(redirectPath); // Redirect user after login
+      } else {
+        setError(loginData.message || "Login failed after signup.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
       setError("Something went wrong. Try again later.");
     }
+
     setLoading(false);
   };
 
