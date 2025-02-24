@@ -52,11 +52,6 @@ const Navbar = () => {
                   </div>
                   <ul className="py-2">
                     <li>
-                      <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li>
                       <Link to="/settings" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">
                         Settings
                       </Link>
