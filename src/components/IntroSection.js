@@ -37,7 +37,7 @@ const IntroSection = () => {
     // Remove the bubble and its droplets from the DOM after the animation
     setTimeout(() => {
       setBubbles((prevBubbles) => prevBubbles.filter((bubble) => bubble.id !== id));
-    }, 500); // Match the duration of the burst animation
+    }, 300); // Faster removal of the bubble
   };
 
   return (
@@ -72,8 +72,8 @@ const IntroSection = () => {
                   ease: "linear",
                 },
               }}
-              exit={{ scale: 1.5, opacity: 0, transition: { duration: 0.5 } }}
-              onHoverStart={() => handleBubbleBurst(bubble.id)}
+              exit={{ scale: 1.5, opacity: 0, transition: { duration: 0.2 } }} // Faster exit animation
+              onHoverStart={() => handleBubbleBurst(bubble.id)} // Burst immediately on hover
             >
               {/* Droplets for burst effect */}
               <AnimatePresence>
@@ -81,27 +81,27 @@ const IntroSection = () => {
                   bubble.droplets.map((droplet) => (
                     <motion.div
                       key={droplet.id}
-                      className="absolute bg-white rounded-full opacity-30"
+                      className="absolute bg-white rounded-full opacity-70" // Increased opacity
                       style={{
-                        width: "8px",
-                        height: "8px",
+                        width: "10px", // Slightly larger droplets
+                        height: "10px",
                         left: "50%",
                         top: "50%",
                       }}
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{
                         scale: 1,
-                        opacity: 0.3,
+                        opacity: 0.7, // Increased opacity
                         x: Math.cos(droplet.angle) * droplet.distance,
                         y: Math.sin(droplet.angle) * droplet.distance,
                         transition: {
                           type: "spring",
-                          stiffness: 100,
-                          damping: 10,
-                          delay: 0.1 * droplet.id,
+                          stiffness: 200, // Faster spring animation
+                          damping: 20,
+                          delay: 0, // No delay for droplets
                         },
                       }}
-                      exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                      exit={{ opacity: 0, transition: { duration: 0.2 } }} // Faster fade-out
                     />
                   ))}
               </AnimatePresence>
