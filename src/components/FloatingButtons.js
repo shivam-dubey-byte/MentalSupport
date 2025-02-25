@@ -14,7 +14,7 @@ const FloatingButtons = () => {
       if (currentScrollY > lastScrollY && currentScrollY > 300) {
         // Scrolling down and past 300px
         setShowScrollButton(true);
-        resetInactivityTimer(); // Reset the inactivity timer
+        resetInactivityTimer(); // Reset the inactivity timer only on downward scroll
       } else if (currentScrollY < lastScrollY) {
         // Scrolling up
         setShowScrollButton(false);
@@ -23,7 +23,7 @@ const FloatingButtons = () => {
       setLastScrollY(currentScrollY); // Update last scroll position
     };
 
-    // Reset the inactivity timer on scroll
+    // Reset the inactivity timer on downward scroll
     const resetInactivityTimer = () => {
       if (inactivityTimer.current) {
         clearTimeout(inactivityTimer.current); // Clear the existing timer
